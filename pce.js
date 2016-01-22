@@ -5,7 +5,6 @@ var bodyParser = require('koa-bodyparser');
 var utils = require('./utils');
 
 
-
 app.use(bodyParser());
 
 // check token is provided as a custom header. Skip if its login or sign up
@@ -33,11 +32,10 @@ app.use(route.post('/get_balance', getBalance));
 app.use(route.post('/upd_balance', updBalance));
 app.use(route.post('/get_bank_details', getBankDetails));
 app.use(route.post('/get_services', getServices));
-app.use(route.post('/get_services', createTransaction));
+app.use(route.post('/create_transaction', createTransaction));
 app.use(route.post('/get_transactions', getTransactions));
 app.use(route.post('/get_profile', getProfile));
 app.use(route.post('/upd_profile', updProfile));
-
 
 
 function *index() {
@@ -82,7 +80,7 @@ function *signUp() {
 
 function *getBalance() {
     var accountNumber = this.request.body.accountNumber;
-    if(accountNumber){
+    if (accountNumber) {
         var account = utils.getAccount(accountNumber);
         this.body = {
             "msg": account.balance
@@ -96,7 +94,7 @@ function *getBalance() {
 function *updBalance() {
     var accountNumber = this.request.body.accountNumber;
     var transactionId = this.request.body.transactionId;
-    if(accountNumber && transactionId){
+    if (accountNumber && transactionId) {
         utils.updateBalance(accountNumber, transactionId);
         this.status = 200;
     } else {
@@ -107,43 +105,48 @@ function *updBalance() {
 function *getBankDetails() {
     this.body = {
         "cta_nro": "1233532523499854932",
-        "cbu":"42345gdfgf4323Gfgdfgdfgd"
+        "cbu": "42345gdfgf4323Gfgdfgdfgd"
     }
 }
 
-function *createTransaction(){
+function *createTransaction() {
     var serviceId = this.request.body.serviceId;
     var subserviceId = this.request.body.subserviceId;
     var accountNumber = this.request.body.accountNumber;
     var subserviceValues = this.request.body.subserviceValues;
 
-    if(serviceId && subserviceId && accountNumber && subserviceValues){
-        this.body = {
-            "msg":"TO BE IMPLEMENTED"
-        }
+    if (accountNumber && subserviceValues) {
+        utils.createTransaction(serviceId, subserviceId, accountNumber, subserviceValues);
+        this.status = 200;
     } else {
         this.status = 422;
     }
 
 }
 
-function *getTransactions(){
-    this.body = utils.getTransactions();
+function *getTransactions() {
+    var accountNumber = this.request.body.accountNumber;
+    if (accountNumber) {
+        this.body = utils.getTransactionsByAccount(accountNumber);
+    } else {
+        this.status = 422;
+    }
+
 }
 
-function *getProfile(){
+function *getProfile() {
     var accountNumber = this.request.body.accountNumber;
-    if(accountNumber){
+    if (accountNumber) {
         this.body = utils.getProfile(accountNumber);
     } else {
         this.status = 422;
     }
 }
 
-function *updProfile(){
+function *updProfile() {
     var accountNumber = this.request.body.accountNumber;
     var updProfile = this.request.body.profile;
-    if(updProfile && accountNumber){
+    if (updProfile && accountNumber) {
         utils.updateProfile(accountNumber, updProfile);
         this.status = 200;
     } else {
@@ -152,69 +155,7 @@ function *updProfile(){
 }
 
 function *getServices() {
-    this.body = {
-        "services": [{
-            "id": "1",
-            "name": "Recarga de celular",
-            "subservices": [{
-                "id": "11",
-                "name": "Claro",
-                "fields": [{
-                    "name": "Nro celular",
-                    "type": "numeric",
-                    "validation": ""
-                }]
-            }, {
-                "id": "12",
-                "name": "Personal",
-                "fields": [{
-                    "name": "Nro celular",
-                    "type": "numeric",
-                    "validation": ""
-                }]
-            }, {
-                "id": "13",
-                "name": "Movistar",
-                "fields": [{
-                    "name": "Nro celular",
-                    "type": "numeric",
-                    "validation": ""
-                }]
-            }]
-        }, {
-            "id": "2",
-            "name": "Paga con efectivo",
-            "subservices": [{
-                "id": "21",
-                "name": "Carga de saldo",
-                "fields": [{
-                    "name": "Nro de cuenta de PCE",
-                    "type": "numeric",
-                    "validation": ""
-                }, {
-                    "name": "Saldo",
-                    "type": "numeric",
-                    "validation": ""
-                }]
-            }, {
-                "id": "22",
-                "name": "Transferencia",
-                "fields": [{
-                    "name": "Nro cuenta PCE origen",
-                    "type": "numeric",
-                    "validation": ""
-                }, {
-                    "name": "Nro cuenta PCE destino",
-                    "type": "numeric",
-                    "validation": ""
-                }, {
-                    "name": "Saldo",
-                    "type": "numeric",
-                    "validation": ""
-                }]
-            }]
-        }]
-    }
+    this.body = utils.getServices();
 }
 
 app.listen(7750);

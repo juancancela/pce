@@ -1,5 +1,6 @@
 var uuid = require('node-uuid');
 var CronJob = require('cron').CronJob;
+var now = new Date();
 
 new CronJob('*/15 * * * *', function() {
     accounts.forEach(function(account){
@@ -8,17 +9,20 @@ new CronJob('*/15 * * * *', function() {
 }, null, true, 'America/Los_Angeles');
 
 var accounts = [{"accountNumber": "12345", "password": "12345", balance: 0, "token": null}];
-var transactions = [{"id":"1", "balance":50},{"id":"2", "balance":10},{"id":"3", "balance":100},{"id":"4", "balance":5000}];
+
+var transactions = [{"id":"1", "accountNumber":"12345", "balance":50, "phone": "1235235232", "date": now},{"id":"2", "accountNumber":"12345", "balance":10, "phone": "453534535", "date": now},{"id":"3", "accountNumber":"12345", "balance":100, "phone": "4354353453", "date": now},{"id":"4", "accountNumber":"12345", "balance":5000, "phone": "35345345", "date": now}];
+
 var profiles = [{
     "accountNumber":"12345",
     "name": "Juan",
     "lastname": "Cance",
     "dni": "3423423423",
     "email": "cancela@sdkfd.com",
-    "clave": "fsdkjfdksf",
+    "password": "fsdkjfdksf",
     "type": "comercio o persona",
     "commerce_name": "Pizzeria los HDP",
-    "commerce_address": "San Aere 34234"
+    "commerce_address": "San Aere 34234",
+    "phone": "1554543424"
 }];
 
 
@@ -72,8 +76,13 @@ function isValidToken(token){
     return isValidToken;
 }
 
-function getTransactions(){
-    return transactions;
+function getTransactionsByAccount(accountNumber){
+    var accountTransactions = [];
+    transactions.forEach(function(transaction){
+        if(transaction.accountNumber == accountNumber) accountTransactions.push(transaction);
+    });
+
+    return accountTransactions;
 }
 
 function updateProfile(accountNumber, updatedProfile){
@@ -82,6 +91,104 @@ function updateProfile(accountNumber, updatedProfile){
     })
 }
 
+function createTransaction(serviceId, subserviceId, accountNumber, valueHash){
+    var transaction = {};
+    var now = new Date();
+    var profile = getProfile(accountNumber);
+    var phone = null;
+    if(profile) phone = profile.phone;
+    valueHash.forEach(function(entry){
+        transaction[entry.key] = entry.value;
+    });
+    transaction.date = now;
+    transaction.phone = phone;
+    transaction.id = transactions.length + 1;
+    transaction.accountNumber = accountNumber;
+
+    if (!transaction.balance) transaction.balance = 0;
+
+    transactions.push(transaction);
+}
+
+function getServices() {
+    return {
+        "services": [{
+            "id": "1",
+            "name": "phone_load",
+            "subservices": [{
+                "id": "11",
+                "name": "Claro",
+                "fields": [{
+                    "name": "phone_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "balance",
+                    "type": "Number",
+                    "validation": ""
+                }]
+            }, {
+                "id": "12",
+                "name": "Personal",
+                "fields": [{
+                    "name": "phone_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "balance",
+                    "type": "Number",
+                    "validation": ""
+                }]
+            }, {
+                "id": "13",
+                "name": "Movistar",
+                "fields": [{
+                    "name": "phone_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "balance",
+                    "type": "Number",
+                    "validation": ""
+                }]
+            }]
+        }, {
+            "id": "2",
+            "name": "pce",
+            "subservices": [{
+                "id": "21",
+                "name": "balance_load",
+                "fields": [{
+                    "name": "pce_account_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "balance",
+                    "type": "Number",
+                    "validation": ""
+                }]
+            }, {
+                "id": "22",
+                "name": "transference",
+                "fields": [{
+                    "name": "origin_pce_account_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "destiny_pce_account_number",
+                    "type": "Number",
+                    "validation": ""
+                }, {
+                    "name": "balance",
+                    "type": "Number",
+                    "validation": ""
+                }]
+            }]
+        }]
+    }
+}
+
+
 module.exports = {
     getAccountToken : getAccountToken,
     isValidAccount  : getAccountToken,
@@ -89,7 +196,9 @@ module.exports = {
     getAccount      : getAccount,
     isValidToken    : isValidToken,
     updateBalance   : updateBalance,
-    getTransactions : getTransactions,
+    getTransactionsByAccount : getTransactionsByAccount,
     getProfile      : getProfile,
-    updateProfile   : updateProfile
+    updateProfile   : updateProfile,
+    getServices     : getServices,
+    createTransaction : createTransaction
 };
