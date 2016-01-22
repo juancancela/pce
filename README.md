@@ -16,7 +16,7 @@
  
 ## POST /login  (cuenta valida de prueba 12345/12345)
 
-  ## request:
+  request:
   *   url: http://localhost:3000/login
   *   headers: n/a
   *   Content-Type: application/json
@@ -25,13 +25,13 @@
       "password":"12345"
     }
 
-  ## response:
-    headers: token generado
+  response:
+  * headers: token generado
 
 
 ## POST /sign_up
   
-  ## request:
+  request:
   *   url: http://localhost:3000/login
   *   headers: n/a
   *   Content-Type: application/json
@@ -40,20 +40,20 @@
       "password":"123fsdf45"
     }
 
-  ## response:
+  response:
   *   headers: token generado
 
 
 
 ## POST /get_bank_details
 
-## request:
+request:
 * url: http://localhost:3000/get_bank_details
 * headers: token: incluir token generado en el sign_up o el login
 * Content-Type: application/json
 * body : n/a
 
-## response:
+response:
 * body: {
     "cta_nro": "1233532523499854932",
     "cbu": "42345gdfgf4323Gfgdfgdfgd"
@@ -62,20 +62,20 @@
 
 ## POST /get_balance (aka: obtener saldo)
 
-  ## request:
+  request:
   *  url: http://localhost:3000/get_balance
   *  headers: token: incluir token generado en el sign_up o el login
   *  Content-Type: application/json
   *  body : n/a
 
-  ## response:
+  response:
   *  body: {"msg":0} (si el balance de la cuenta es 0)
 
 
 
 ## POST /upd_balance (aka: agrega plata a una cuenta)
   
-  ## request:
+  request:
   *  url: http://localhost:3000/upd_balance
   *  headers: token: incluir token generado en el sign_up o el login
   *  Content-Type: application/json
@@ -85,7 +85,7 @@
    }
      (nota: transactionId validos: 1 (agrega 50), 2 (agrega 10), 3 (agrega 100), 4 (agrega 5000))
 
-  ## response:
+  response:
   *  body: {"msg":50} (si el balance de la cuenta es 0, le suma los 50 de la transaction con id = 1)
     
   
