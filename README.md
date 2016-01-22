@@ -10,7 +10,14 @@
  - Ejecutar node pce.js  (la app corre en el puerto 3000)
 
 
+## Para deployarlo:
 
+  - Iniciar sesion ssh
+  - Ejecutar:
+    * cd /home/juan/apps/pce
+    * git pull
+    * forever stop pce.js
+    * forever start pce.js
 
 ## Endpoints (son todos POSTs)
  
