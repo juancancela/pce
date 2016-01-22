@@ -94,5 +94,78 @@ response:
 
   response:
   *  body: {"msg":50} (si el balance de la cuenta es 0, le suma los 50 de la transaction con id = 1)
+
+
+## POST /get_services (servicios y subservicios)
+
+  request:
+  *  url: http://localhost:3000/get_services
+  *  headers: token: incluir token generado en el sign_up o el login
+  *  Content-Type: application/json
+  *  body : n/a
+     (nota: transactionId validos: 1 (agrega 50), 2 (agrega 10), 3 (agrega 100), 4 (agrega 5000))
+
+  response:
+  *  body: JSON con la lista de servicios y subservicios
+
+
+## POST /create_transaction
+
+  request:
+  *  url: http://localhost:3000/get_transaction
+  *  headers: token: incluir token generado en el sign_up o el login
+  *  Content-Type: application/json
+  *  body : {
+       "accountNumber":"12345",
+       "serviceId":"1",
+       "subserviceId":"11",
+       "subserviceValues" : ["balance":76]
+     }
+     Nota: Las keys del array subserviceValues deberian matchear los fields definidos en el array de subservicios, aunque ahora mismo no se valida. Incluir siempre balance, sino, defaultea a 0.
+
+  response:
+  *  body: JSON con la lista de servicios y subservicios
+  
+ 
+## POST /get_transactions
+
+  request:
+  *  url: http://localhost:3000/get_transactions
+  *  headers: token: incluir token generado en el sign_up o el login
+  *  Content-Type: application/json
+  *  body : {
+       "accountNumber":"12345"
+     }
+
+  response:
+  *  body: JSON con las transacciones asociadas al account number
+  
+
+## POST /get_profile
+
+  request:
+  *  url: http://localhost:3000/get_profile
+  *  headers: token: incluir token generado en el sign_up o el login
+  *  Content-Type: application/json
+  *  body : {
+       "accountNumber":"12345"
+     }
+
+  response:
+  *  body: JSON con el profile asociado al account number provisto
     
   
+## POST /upd_profile
+
+  request:
+  *  url: http://localhost:3000/upd_profile
+  *  headers: token: incluir token generado en el sign_up o el login
+  *  Content-Type: application/json
+  *  body : {
+       "accountNumber":"12345",
+       "profile": "Incluir JSON del profile (pisa al anterior profile)"
+     }
+
+  response:
+  *  body: n/a
+    
