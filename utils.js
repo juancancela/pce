@@ -8,7 +8,27 @@ new CronJob('*/15 * * * *', function() {
 }, null, true, 'America/Los_Angeles');
 
 var accounts = [{"accountNumber": "12345", "password": "12345", balance: 0, "token": null}];
-var transactions = [{"id":"1", "balance":50},{"id":"2", "balance":10},{"id":"3", "balance":100},{"id":"4", "balance":5000}]
+var transactions = [{"id":"1", "balance":50},{"id":"2", "balance":10},{"id":"3", "balance":100},{"id":"4", "balance":5000}];
+var profiles = [{
+    "accountNumber":"12345",
+    "name": "Juan",
+    "lastname": "Cance",
+    "dni": "3423423423",
+    "email": "cancela@sdkfd.com",
+    "clave": "fsdkjfdksf",
+    "type": "comercio o persona",
+    "commerce_name": "Pizzeria los HDP",
+    "commerce_address": "San Aere 34234"
+}];
+
+
+function getProfile(accountNumber){
+    var profile = null;
+    profiles.forEach(function(prof){
+        if(prof.accountNumber == accountNumber) profile = prof;
+    });
+    return profile;
+}
 
 function getAccountToken(accountNumber, password) {
     var token = null;
@@ -52,11 +72,24 @@ function isValidToken(token){
     return isValidToken;
 }
 
+function getTransactions(){
+    return transactions;
+}
+
+function updateProfile(accountNumber, updatedProfile){
+    profiles.forEach(function(profile){
+        if(profile.accountNumber == accountNumber) profile = updatedProfile;
+    })
+}
+
 module.exports = {
     getAccountToken : getAccountToken,
     isValidAccount  : getAccountToken,
     createAccount   : createAccount,
     getAccount      : getAccount,
     isValidToken    : isValidToken,
-    updateBalance   : updateBalance
+    updateBalance   : updateBalance,
+    getTransactions : getTransactions,
+    getProfile      : getProfile,
+    updateProfile   : updateProfile
 };
