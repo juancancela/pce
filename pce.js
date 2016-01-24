@@ -63,6 +63,9 @@ function *login() {
     if (utils.isValidAccount(accountNumber, password)) {
         var token = utils.getAccountToken(accountNumber, password);
         this.set('token', token);
+        this.body = {
+            "msg":"OK"
+        };
         this.status = 200;
     } else {
         this.status = 403;
@@ -75,6 +78,9 @@ function *signUp() {
     utils.createAccount(accountNumber, password);
     var token = utils.getAccountToken(accountNumber, password);
     this.set('token', token);
+    this.body = {
+        "msg":"OK"
+    };
     this.status = 200;
 }
 
@@ -96,6 +102,9 @@ function *updBalance() {
     var transactionId = this.request.body.transactionId;
     if (accountNumber && transactionId) {
         utils.updateBalance(accountNumber, transactionId);
+        this.body = {
+            "msg":"OK"
+        };
         this.status = 200;
     } else {
         this.status = 422;
@@ -117,6 +126,9 @@ function *createTransaction() {
 
     if (accountNumber && subserviceValues) {
         utils.createTransaction(serviceId, subserviceId, accountNumber, subserviceValues);
+        this.body = {
+            "msg":"OK"
+        };
         this.status = 200;
     } else {
         this.status = 422;
@@ -148,6 +160,9 @@ function *updProfile() {
     var updProfile = this.request.body.profile;
     if (updProfile && accountNumber) {
         utils.updateProfile(accountNumber, updProfile);
+        this.body = {
+          "msg":"OK"
+        };
         this.status = 200;
     } else {
         this.status = 422;
