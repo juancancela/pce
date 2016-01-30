@@ -26,6 +26,14 @@ var profiles = [{
 }];
 
 
+
+function deleteAccountToken(accountNumber){
+    accounts.forEach(function(account){
+        if(account.accountNumber == accountNumber) account.token = null;
+    }) 
+}
+
+
 function getProfile(accountNumber){
     var profile = null;
     profiles.forEach(function(prof){
@@ -200,5 +208,6 @@ module.exports = {
     getProfile      : getProfile,
     updateProfile   : updateProfile,
     getServices     : getServices,
-    createTransaction : createTransaction
+    createTransaction : createTransaction,
+    deleteAccountToken : deleteAccountToken 
 };

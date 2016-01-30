@@ -36,6 +36,7 @@ app.use(function *(next) {
 app.use(route.get('/', index));
 app.use(route.post('/login', login));
 app.use(route.post('/sign_up', signUp));
+app.use(route.post('/sign_out', signOut));
 app.use(route.post('/get_balance', getBalance));
 app.use(route.post('/upd_balance', updBalance));
 app.use(route.post('/get_bank_details', getBankDetails));
@@ -65,6 +66,16 @@ function *index() {
             "upd_profile": `${this.request.origin}/upd_profile`
         }
     };
+}
+
+
+function *signOut() {
+    var accountNumber = this.request.body.accountNumber;
+    utils.deleteAccountToken(accountNumber);
+    this.body = {
+        "msg":"OK"
+    };
+    this.status = 200;
 }
 
 function *login() {
