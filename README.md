@@ -116,12 +116,15 @@ response:
   *  headers: token: incluir token generado en el sign_up o el login
   *  Content-Type: application/json
   *  body : {
-       "accountNumber":"12345",
-       "serviceId":"1",
-       "subserviceId":"11",
-       "subserviceValues" : ["balance":76]
+	  "accountNumber": "12345",
+	  "serviceId": "1",
+	  "subserviceId": "11",
+	  "subserviceValues": [{
+		  "key": "balance",
+		  "value": 76
+	  }]
      }
-     Nota: Las keys del array subserviceValues deberian matchear los fields definidos en el array de subservicios, aunque ahora mismo no se valida. Incluir siempre balance, sino, defaultea a 0.
+     Nota: Las keys del array subserviceValues (objetos del tipo {"key":"keyValue", "value":"value"}) deberian matchear los fields definidos en el array de subservicios, aunque ahora mismo no se valida. Incluir siempre balance, sino, defaultea a 0.
 
   response:
   *  body: JSON con la lista de servicios y subservicios
