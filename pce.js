@@ -7,11 +7,18 @@ var utils = require('./utils');
 
 app.use(bodyParser());
 
-// check token is provided as a custom header. Skip if its login or sign up
+// check token is provided as a custom header. Skip if its login or sign up, or token=false param is provided
 app.use(function *(next) {
-    if (this.originalUrl == "/login" || this.originalUrl == "/sign_up" || this.originalUrl == "/") {
+    var _skipTokenRequest = function(request){
+        return request.originalUrl.indexOf("token=false") > -1;
+    }
+    
+    if(_skipTokenRequest(this.request)){
         yield next;
     } else {
+     if (this.originalUrl == "/login" || this.originalUrl == "/sign_up" || this.originalUrl == "/") {
+        yield next;
+     } else {
         var token = this.header.token;
         if (!utils.isValidToken(token)) {
             this.status = 403;
@@ -21,6 +28,7 @@ app.use(function *(next) {
         } else {
             yield next;
         }
+    }   
     }
 });
 

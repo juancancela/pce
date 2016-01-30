@@ -9,6 +9,9 @@
  - Ejecutar npm install
  - Ejecutar node pce.js  (la app corre en el puerto 3000)
 
+## Para no requerir el token
+Se puede skipear la necesidad de generar un token de acceso is se agrega el query parameter token=false.
+Ejemplo: http://localhost:7750/get_transactions?token=false
 
 ## Para deployarlo:
 
