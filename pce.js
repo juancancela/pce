@@ -170,7 +170,12 @@ function *getTransactions() {
 function *getProfile() {
     var accountNumber = this.request.body.accountNumber;
     if (accountNumber) {
-        this.body = utils.getProfile(accountNumber);
+        var profile = utils.getProfile(accountNumber);
+        if(profile) {
+            this.body = profile;
+        } else {
+            this.status = 404;
+        }
     } else {
         this.status = 422;
     }
@@ -178,7 +183,7 @@ function *getProfile() {
 
 function *updProfile() {
     var accountNumber = this.request.body.accountNumber;
-    var updProfile = this.request.body.profile;
+    var updProfile = this.request.body;
     if (updProfile && accountNumber) {
         utils.updateProfile(accountNumber, updProfile);
         this.body = {

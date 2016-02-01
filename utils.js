@@ -94,9 +94,14 @@ function getTransactionsByAccount(accountNumber){
 }
 
 function updateProfile(accountNumber, updatedProfile){
-    profiles.forEach(function(profile){
-        if(profile.accountNumber == accountNumber) profile = updatedProfile;
-    })
+    var profileExists = false;
+    for(var i = 0; i < profiles.length; i++){
+        if(profiles[i].accountNumber == accountNumber){
+            profiles[i] = updatedProfile;
+            profileExists = true;
+        }
+    }
+    if(!profileExists) profiles.push(updatedProfile);
 }
 
 function createTransaction(serviceId, subserviceId, accountNumber, valueHash){
